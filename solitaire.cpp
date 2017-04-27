@@ -40,7 +40,6 @@ for(int i = 0; i < 54; i++)
 		}
 	}
 
-cout << "shifting Joker B" << endl;
 for(int i = 0; i < 54; i++)
 	{
 		if(cards[i] == 54)
@@ -111,9 +110,9 @@ void TripleCut(int cards[])
 	}
 
 
-	for(int i = (below + 1); i < 54; i++) // position zero to before first joker moves to end
+	for(int i = 0; i < above; i++) // position zero to before first joker moves to end
 	{
-		array[swap] = cards[i - below - 1];
+		array[swap] = cards[i];
 		swap++;
 	}
 
