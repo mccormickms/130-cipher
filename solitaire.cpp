@@ -12,6 +12,8 @@
 #include <string> // string functions
 #include <cctype> // for punc check
 #include <algorithm> // for remove_if
+#include <fstream> // for file I/O
+#include <sstream> // for stringstream output to file
 
 using namespace std;
 
@@ -238,8 +240,17 @@ void getKeystream(int keys[], int length) // fills encode array with keystream v
 
 int main() {
 
+	ofstream outs;
+
+	outs.open("encoded.txt");
+	if(outs.fail())
+	{
+		cout << "Output file opening failed." << endl;
+		exit(1);
+	}
+
 	srand(time(0)); // seed random number
-	string input, output, temp;
+	string input;
 
 	for (int i = 0; i < 54; i++) // fills deck array with values from 1 to 54
 	{
@@ -278,9 +289,9 @@ int encode[input.length()]; // creates an int array the same length as the messa
 for(unsigned int i = 0; i < input.length(); i++) // fills int array with the value of each letter of message
 {
 	encode[i] = (int(input.at(i)) - 64);
-	cout << encode[i] << " ";
+	//cout << encode[i] << " ";
 }
-cout << endl << "ASCII value of written message" << endl << "length of message is " << input.length() << endl << endl;
+//cout << endl << "ASCII value of written message" << endl << "length of message is " << input.length() << endl << endl;
 
 int length = input.length();
 
@@ -288,10 +299,23 @@ int keys[length];
 
 getKeystream(keys, length);
 
-for(int i = 0; i < length; i++)
+//for(int i = 0; i < length; i++) // for printing keystream to screen if desired
+//{
+//	cout << keys[i] << " ";
+//}
+//cout << endl << "value of keystream" << endl << endl;
+
+stringstream output;
+string to_file;
+
+for(int i = 0; i < length; i++) // for printing keystream to file in alpha DOES NOT WORK
 {
-	cout << keys[i] << " ";
+	keys[i] =(((keys[i] + encode[i]) % 26) + 64);
+	char c = keys[i];
+	outs << c << " ";
 }
-cout << endl << "value of keystream" << endl << endl;
+
+
+
 	return 0;
 }
