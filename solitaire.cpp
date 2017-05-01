@@ -29,19 +29,22 @@ void shiftJokers() // moves Joker A down one card and Joker B down two cards
 
 	for(int i = 0; i < 54; i++)
 		{
-			if(deck[i] == 53) // check if joker A is in last position of deck
+			if(deck[i] == 53) // check joker A position in deck
 			{
 				if(i == 53) // Joker A is last in deck
 				{
+					cout << "Joker A is last in deck, shifting to index 1" << endl;
 					while((i-1) != 0) // moves joker A to index 1
 					{
 						int temp = deck[i-1];
 						deck[i-1] = deck[i];
 						deck[i] = temp;
+						i--;
 					}
 				}
 				else // joker A not last in deck, swap joker with next lower card
 				{
+					//cout << "Joker A not last, swapping with next card" << endl;
 					int temp = deck[i+1];
 					deck[i+1] = deck[i];
 					deck[i] = temp;
@@ -63,25 +66,30 @@ void shiftJokers() // moves Joker A down one card and Joker B down two cards
 			{
 				if(i == 53) // check if joker B is last position in deck
 				{
+					//cout << "Joker B last in deck, moving to index 2" << endl;
 					while((i-2) != 0) // Joker B in last, move to index 2
 					{
 						int temp = deck[i-1];
 						deck[i-1] = deck[i];
 						deck[i] = temp;
+						i--;
 					}
 				}
 				else if(i == 52) // check if joker B 2nd to last index
 				{
+					//cout << "Joker B second to last in deck, moving to index 1" << endl;
 					while((i-1) != 0)// joker B in 2nd to last index, move to index 1
 					{
-						int temp = deck[i+1];
-						deck[i+1] = deck[i];
+						int temp = deck[i-1];
+						deck[i-1] = deck[i];
 						deck[i] = temp;
+						i--;
 					}
-					i++;
+
 				}
 				else // joker B not at index 52 or 53, shift joker B down two cards
 				{
+					//cout << "Joker B not last or second to last, shifting down two positions" << endl;
 					int temp = deck[i+1];
 					deck[i+1] = deck[i];
 					deck[i] = temp;
@@ -191,7 +199,7 @@ int getOutput() // finds key value for a single character
 		temp = 53;
 	}
 
-	if(deck[temp] == 53 || deck[temp] == 54)
+	if(deck[temp] == 53 || deck[temp] == 54) // card counted to from top card is joker, return 100 so this key is run again
 	{
 		return 100;
 	}
@@ -204,7 +212,7 @@ void getKeystream(int keys[], int length) // fills encode array with keystream v
 	//cout << "in Keystream" << endl;
 	for (int i = 0; i < length; i++)
 	{
-		cout << "i = " << i << endl;
+		//cout << "Finding output key for letter " << i << endl;
 		shiftJokers();
 
 		TripleCut();
@@ -213,10 +221,10 @@ void getKeystream(int keys[], int length) // fills encode array with keystream v
 
 		keys[i] = getOutput();
 
-		if(keys[i] == 100)
+		if(keys[i] == 100) // card counted to was a joker, needs to be repeated
 		{
-			i--;
-			cout << "i = " << i << " output was a joker." << endl;
+			i--; // this sets loop back one iteration so no letters are lost
+			//cout << "i = " << i << " output was a joker." << endl;
 		}
 
 		if(keys[i] > 26)
@@ -224,7 +232,7 @@ void getKeystream(int keys[], int length) // fills encode array with keystream v
 			keys[i] -= 26;
 		}
 
-		cout << keys[i] << " " << endl;
+		//cout << "output key for letter " << i << " is " << keys[i] << endl;
 	}
 }
 
@@ -244,7 +252,6 @@ int main() {
 		int temp = deck[i]; deck[i] = deck[r]; deck[r] = temp;
 	}
 
-//	shiftJokers();
 
 cout << "What is your message? Write out numbers please." << endl; // prompts for message to be encoded
 getline (cin, input);
@@ -262,18 +269,18 @@ for (int i = 0, len = input.size(); i < len; i++) // removes punctuation, whites
 		    len = input.size();
 	    }
         input.at(i) = toupper(input.at(i));
-        cout << input[i];
+        //cout << input[i];
     }
 cout << endl << endl;
 
 int encode[input.length()]; // creates an int array the same length as the message
 
-for(int i = 0; i < input.length(); i++) // fills int array with the value of each letter of message
+for(unsigned int i = 0; i < input.length(); i++) // fills int array with the value of each letter of message
 {
 	encode[i] = (int(input.at(i)) - 64);
 	cout << encode[i] << " ";
 }
-cout << endl << "ASCII value of written message" << endl << endl;
+cout << endl << "ASCII value of written message" << endl << "length of message is " << input.length() << endl << endl;
 
 int length = input.length();
 
