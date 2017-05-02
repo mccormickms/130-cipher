@@ -14,11 +14,12 @@
 #include <algorithm> // for remove_if
 #include <fstream> // for file I/O
 #include <sstream> // for stringstream output to file
+#include <iomanip>
 
 using namespace std;
 
-int deck[54] = {21, 27, 45, 5, 14, 43, 41, 42, 12, 25, 22, 7, 53, 18, 47, 34, 29, 13, 32, 52, 16, 39, 54, 3, 48, 23, 19, 8, 9, 31,
-		15, 44, 46, 24, 30, 38, 10, 49, 35, 20, 40, 11, 6, 36, 51, 1, 2, 50, 33, 37, 26, 28, 4}; // used for decoding, fill with saved order
+int deck[54] = {7, 8, 41, 38, 15, 29, 32, 5, 28, 37, 19, 45, 33, 46, 2, 27, 12, 40, 49, 4, 42, 39, 3, 43, 30, 1, 31, 36, 54, 44, 14,
+		26, 25, 34, 51, 11, 22, 23, 48, 6, 17, 24, 18, 20, 13, 21, 10, 50, 9, 52, 53, 35, 16}; // used for decoding, fill with saved order
 
 void shiftJokers() // moves Joker A down one card and Joker B down two cards
 {
@@ -224,10 +225,15 @@ void getKeystream(int keys[], int length) // fills encode array with keystream v
 
 		keys[i] = getOutput();
 
-		if(keys[i] == 100) // card counted to was a joker, needs to be repeated
+		while(keys[i] == 100) // card counted to was a joker, needs to be repeated
 		{
-			i--; // this sets loop back one iteration so no letters are lost
-			//cout << "i = " << i << " output was a joker." << endl;
+			shiftJokers();
+
+			TripleCut();
+
+			CountCut();
+
+			keys[i] = getOutput();
 		}
 
 		if(keys[i] > 26)
@@ -297,13 +303,17 @@ int main() {
 			a += 26;
 			a = (a - b);
 			encode[i] = a;
+			cout << left << setw(3) << encode[i];
 		}
 		else
 		{
 			a = ((a - b) % 26);
 			encode[i] = a;
+			cout << left << setw(3) << encode[i];
 		}
 	}
+
+	cout << endl;
 
 	//for(int i = 0; i < length; i++) // for printing keystream and letters to screen if desired
 	//{
@@ -314,7 +324,7 @@ int main() {
 	for(int i = 0; i < length; i++) // for printing letters to screen if desired
 	{
 		send_this[i] = (encode[i] + 64);
-		cout << send_this[i];
+		cout << left << setw(3) << send_this[i];
 	}
 
 	//cout << endl << "value of keystream" << endl << endl;
