@@ -242,7 +242,7 @@ void getKeystream(int keys[], int length) // fills encode array with keystream v
 			keys[i] -= 26;
 		}
 
-		cout << left << setw(3) << keys[i]; //cout << "output key for letter " << i << " is " << keys[i] << endl;
+		//cout << left << setw(3) << keys[i]; //cout << "output key for letter " << i << " is " << keys[i] << endl;
 	}
 }
 
@@ -264,14 +264,18 @@ int main()
 	for (int i = 0; i < 54; i++) // fills deck array with values from 1 to 54
 	{
 		deck[i] = i+1;
+		//cout << left << setw(3) << deck[i];
 	}
 
-	for (int i=0; i<(54-1); i++) // shuffles deck
+	for (int i=0; i<54; i++) // shuffles deck
 	{
 		int r = i + (rand() % (54-i)); // Random remaining position.
 		int temp = deck[i]; deck[i] = deck[r]; deck[r] = temp;
-		outs << deck[i]  << ", "; // sends deck to output file for decoding
+		//cout << left << setw(3) << deck[i];
+		outs << deck[i] << ", "; // sends deck to output file for decoding
 	}
+
+	//cout << endl << "deck[53] = " << deck[53] << endl;
 
 	outs << endl;
 
@@ -295,10 +299,10 @@ int main()
 			//outs << left << setw(3) << input[i];
 		}
 
-	for(int i = 0; i < input.size(); i++)
-	{
-		outs << left << setw(3) << input[i];
-	}
+//	for(unsigned int i = 0; i < input.size(); i++)
+//	{
+//		outs << left << setw(3) << input[i];
+//	}
 
 	//cout << endl;
 	outs << endl;
@@ -306,12 +310,12 @@ int main()
 	int encode[input.length()]; // creates an int array the same length as the message
 	char send_this[input.length()]; // used for char array that is ouput to screen or file as encoded or decoded message
 
-	cout << "ASCII value" << endl;
+	//cout << "ASCII value" << endl;
 	for(unsigned int i = 0; i < input.length(); i++) // fills int array with the value of each letter of message
 	{
 		encode[i] = (int(input.at(i)) - 64);
-		cout << left << setw(3) << encode[i];
-		outs << left << setw(3) << encode[i];
+		//cout << left << setw(3) << encode[i];
+		//outs << left << setw(3) << encode[i];
 	}
 	cout << endl; //<< "ASCII value of written message" << endl << "length of message is " << input.length() << endl << endl;
 	outs << endl;
@@ -326,17 +330,17 @@ int main()
 	{
 		//cout << "message value is " << encode[i] << endl;
 		encode[i] = (encode[i] + keys[i]);
-//		encode[i] = (encode[i]) % 26;
+		//encode[i] = (encode[i]) % 26;
 		if(encode[i] > 26)
 		{
 			encode[i] -= 26;
 		}
 		//cout << "key value is " << keys[i] << endl;
-		outs << left << setw(3) << encode[i];
+		//outs << left << setw(3) << encode[i];
 	}
 
-	cout << endl;
-	outs << endl;
+	//cout << endl;
+	//outs << endl;
 
 	//for(int i = 0; i < length; i++) // for printing keystream and letters to screen if desired
 	//{
